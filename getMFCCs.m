@@ -8,6 +8,7 @@ MFCCs = [];
 for i=1:size(files)
 %     [y,fs] = audioread('dataset/14307130345/14307130345_语音_01.wav')
 %     if length(files(i).name)>11 && ~strcmp(files(i).name(length(files(i).name)-5:length(files(i).name)-4),'20')
+%     if length(files(i).name)>11
     if length(files(i).name)>11 && ~strcmp(files(i).name(length(files(i).name)-8:length(files(i).name)-7),'语音') &&...
             ~strcmp(files(i).name(length(files(i).name)-11:length(files(i).name)-7),'start')&&...
             ~strcmp(files(i).name(length(files(i).name)-11:length(files(i).name)-7),'Start')
@@ -26,7 +27,21 @@ for i=1:size(files)
 %             continue
 %         end
         [ MFCC, FBEs, frames ] = mymfcc(ny, fs );
+%         %差分参数
+%         m = MFCC';
+%         dtm=zeros(size(m));
+%         for i=3:size(m,1)-2
+%           dtm(i,:)=-2*m(i-2,:)-m(i-1,:)+m(i+1,:)+2*m(i+2,:);
+%         end
+%         dtm=dtm/3;
+% 
+%         %合并mfcc参数和一阶差分mfcc参数
+%         ccc=[m dtm];
+%         %去除首尾两帧，因为这两帧的一阶差分参数为0
+%         ccc=ccc(3:size(m,1)-2,:);
+%         [ MFCC ] = newmfcc(ny, fs );
         MFCCs= [MFCCs MFCC];
+%         MFCCs= [MFCCs ccc'];
    
 %         disp('---------------------MFCC---------------');
 %         size(MFCC)
